@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>EEGEdu</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/@shopify/polaris@4.9.0/styles.min.css" />
+  </head
+  >
+  <body>
+    <div id="root"></div>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-performance.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-analytics.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDOxvc3ajTHyZLXcVPkqb7Nbeo3Tn8eFCs",
+        authDomain: "eegedu.firebaseapp.com",
+        databaseURL: "https://eegedu.firebaseio.com",
+        projectId: "eegedu",
+        storageBucket: "eegedu.appspot.com",
+        messagingSenderId: "987114688746",
+        appId: "1:987114688746:web:b13b68f24897ca97440793",
+        measurementId: "G-2HB7VKGKV9"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      var perf = firebase.performance();
+      firebase.analytics();
+
+      document.addEventListener("DOMContentLoaded", () => {
+        try {
+          firebase.app();
+        } catch (e) {
+          console.error(e);
+          console.log("Error loading the Firebase SDK, check the console.");
+        }
+      });
+    </script>
+  </body>
+</html>

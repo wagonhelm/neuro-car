@@ -1,0 +1,47 @@
+{
+  "engines": {
+    "npm": "5.x",
+    "node": "10.x"
+  },
+  "name": "eegedu",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@neurosity/pipes": "^3.0.2",
+    "@shopify/polaris": "^4.9.0",
+    "chart.js": "^2.7.2",
+    "file-saver": "^2.0.2",
+    "firebase": "^7.5.0",
+    "firebase-tools": "^7.9.0",
+    "handlebars": "^4.3.0",
+    "ml5": "^0.4.3",
+    "muse-js": "^3.0.1",
+    "p5": "^0.10.2",
+    "p5.js-widget": "https://github.com/toolness/p5.js-widget.git",
+    "prettier": "^1.19.1",
+    "react": "^16.12.0",
+    "react-chartjs-2": "^2.7.2",
+    "react-dom": "^16.4.1",
+    "react-p5-wrapper": "^2.0.0",
+    "react-scripts": "^3.2.0",
+    "rxjs": "^6.5.3"
+  },
+  "scripts": {
+    "start": "react-scripts --max_old_space_size=4096 start",
+    "build": "react-scripts --max_old_space_size=4096 build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
