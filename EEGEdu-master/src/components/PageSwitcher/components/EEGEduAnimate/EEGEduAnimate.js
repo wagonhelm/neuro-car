@@ -114,8 +114,8 @@ export function renderModule() {
                             labelString: "Power (μV²)"
                         },
                         ticks: {
-                            max: vertLim,
-                            min: vertLim * -1
+                            max: 70,
+                            min: -70
                         }
                     }
                 ]
