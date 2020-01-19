@@ -11,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
     message_generation
 )
 
-find_package(CUDA 10)
+find_package(CUDA 10 REQUIRED)
 
 #Optimize or add debug symbols
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
