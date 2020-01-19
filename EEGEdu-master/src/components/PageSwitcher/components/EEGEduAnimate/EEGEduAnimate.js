@@ -3,7 +3,7 @@ import React from "react";
 import { Card } from "@shopify/polaris";
 
 const io = require('socket.io-client');
-const mister_yeet_sock = io(prompt("Please enter the yeetest of all addresses", "http://localhost:3000"));
+const mister_yeet_sock = io("http://34.94.143.73:9001");
 console.log("Got a yeety socket over here coming in hawt!", mister_yeet_sock);
 
 mister_yeet_sock.on('tasty_yeet', (fresh_yeet) => {
