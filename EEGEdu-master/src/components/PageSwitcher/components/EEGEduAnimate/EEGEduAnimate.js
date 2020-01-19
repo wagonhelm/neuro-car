@@ -6,24 +6,53 @@ const io = require('socket.io-client');
 const mister_yeet_sock = io("http://34.94.143.73:9001");
 console.log("Got a yeety socket over here coming in hawt!", mister_yeet_sock);
 
-mister_yeet_sock.on('tasty_yeet', (fresh_yeet) => {
-    console.log("Got some tasty yeet over here: ", fresh_yeet);
+mister_yeet_sock.on('eyes_yeet', (fresh_yeet) => {
+    console.log("Got some yeet's lookin' over here: ", fresh_yeet);
 
     // fresh_yeet is 1 for open and aware, 2 for closed and not aware
 
     if(fresh_yeet === 1){
         window.eyeDirection = "center";
-        window.awareness = 2;
-        window.attention = 1
     }else if(fresh_yeet === 0){
         window.eyeDirection = "closed";
-        window.awareness = 0;
-        window.attention = 0
     }else{
         alert("Got some bad, gross, green yeet! :'(");
-        console.log("Ew, yeet was: ", fresh_yeet)
+        console.log("Ew, eyes yeet was: ", fresh_yeet)
     }
 });
+
+mister_yeet_sock.on('fatigue_yeet', (fresh_yeet) => {
+    console.log("Got some tired yeets over here: ", fresh_yeet);
+
+    // fresh_yeet is 1 for open and aware, 2 for closed and not aware
+
+    if(fresh_yeet === 2){
+        window.awareness = 0
+    }else if(fresh_yeet === 1) {
+        window.awareness = 1;
+    }else if(fresh_yeet === 0) {
+        window.awareness = 2;
+    }else{
+        alert("Got some bad, gross, green yeet! :'(");
+        console.log("Ew, fatigue yeet was: ", fresh_yeet)
+    }
+});
+
+mister_yeet_sock.on('attention_yeet', (fresh_yeet) => {
+    console.log("Got some attentive yeets over here: ", fresh_yeet);
+
+    // fresh_yeet is 1 for open and aware, 2 for closed and not aware
+
+    if(fresh_yeet === 1){
+        window.attention = 1;
+    }else if(fresh_yeet === 0) {
+        window.attention = 0;
+    }else{
+        alert("Got some bad, gross, green yeet! :'(");
+        console.log("Ew, attention yeet was: ", fresh_yeet)
+    }
+});
+
 
 window.eyeDirection = "closed";
 window.awareness = 1;

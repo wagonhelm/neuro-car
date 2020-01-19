@@ -11,13 +11,28 @@ rosnodejs.initNode('/yeeter_node')
         const pub = nh.advertise('/muse_filtered_data', 'std_msgs/Float64MultiArray');
 
         // Set up an UBER-YEET subscriber to the MIGHTY YEET ROS MASTER'S classification of YEET:
-        nh.subscribe('/svm/detection', 'std_msgs/Int32', (yeety_detection_data => {
+        nh.subscribe('/svm/fatigue', 'std_msgs/Int32', (yeety_detection_data => {
             // We are receiving a new YEETY SVM detection! Yeet, am I right?!
 
-            console.log("WE GOT A YEET IN THE HOUSE!", yeety_detection_data);
+            console.log("WE GOT A FATIGUED YEETER IN THE HOUSE! Force-feed them an Awake Chocolate ASAP!", yeety_detection_data);
 
-            io.emit('tasty_yeet', yeety_detection_data.data);
+            io.emit('fatigue_yeet', yeety_detection_data.data);
+        }));
 
+        nh.subscribe('/svm/eyes', 'std_msgs/Int32', (yeety_detection_data => {
+            // We are receiving a new YEETY SVM detection! Yeet, am I right?!
+
+            console.log("We have EYES ON THE YEET!", yeety_detection_data);
+
+            io.emit('eyes_yeet', yeety_detection_data.data);
+        }));
+
+        nh.subscribe('/svm/attention', 'std_msgs/Int32', (yeety_detection_data => {
+            // We are receiving a new YEETY SVM detection! Yeet, am I right?!
+
+            console.log("GIVE ME A Y! GIVE ME AN E! GIVE ME AN E! GIVE ME A T! What does that spell? Attention!?", yeety_detection_data);
+
+            io.emit('attention_yeet', yeety_detection_data.data);
         }));
 
         app.get('/', function(req, res){
