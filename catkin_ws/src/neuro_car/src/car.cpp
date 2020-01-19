@@ -5,7 +5,7 @@ int main(int argc, char** argv) {
   handleInterrupts(argc, argv, "car", true);
   ros::NodeHandle priv_nh("~");
 
-  while(!exitFlag)
+  while(!exitFlag && ros::ok())
   {
     
     ros::spinOnce();
