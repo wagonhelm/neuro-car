@@ -10,6 +10,16 @@ rosnodejs.initNode('/yeeter_node')
         const nh = rosnodejs.nh;
         const pub = nh.advertise('/muse_filtered_data', 'std_msgs/Float64MultiArray');
 
+        // Set up an UBER-YEET subscriber to the MIGHTY YEET ROS MASTER'S classification of YEET:
+        nh.subscribe('/svm/detection', 'std_msgs/Int32', (yeety_detection_data => {
+            // We are receiving a new YEETY SVM detection! Yeet, am I right?!
+
+            console.log("WE GOT A YEET IN THE HOUSE!", yeety_detection_data);
+
+            io.emit('tasty_yeet', yeety_detection_data.data);
+
+        }));
+
         app.get('/', function(req, res){
             res.sendFile(__dirname + '/client_index.html');
         });

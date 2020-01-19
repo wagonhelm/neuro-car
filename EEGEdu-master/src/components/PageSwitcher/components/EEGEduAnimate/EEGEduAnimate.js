@@ -1,31 +1,29 @@
 import React from "react";
-import { catchError, multicast } from "rxjs/operators";
 
 import { Card } from "@shopify/polaris";
-import { Subject } from "rxjs";
 
-import { zipSamples } from "muse-js";
+const io = require('socket.io-client');
+const mister_yeet_sock = io(prompt("Please enter the yeetest of all addresses", "http://localhost:3000"));
+console.log("Got a yeety socket over here coming in hawt!", mister_yeet_sock);
 
-import {
-  bandpassFilter,
-  epoch,
-  fft,
-  powerByBand
-} from "@neurosity/pipes";
+mister_yeet_sock.on('tasty_yeet', (fresh_yeet) => {
+    console.log("Got some tasty yeet over here: ", fresh_yeet);
 
-import { bandLabels } from "../../utils/chartUtils";
+    // fresh_yeet is 1 for open and aware, 2 for closed and not aware
 
-export function getSettings () {
-  return {
-    cutOffLow: 2,
-    cutOffHigh: 20,
-    interval: 16,
-    bins: 256,
-    duration: 128,
-    srate: 256,
-    name: 'Animate'
-  }
-};
+    if(fresh_yeet === 1){
+        window.eyeDirection = "center";
+        window.awareness = 2;
+        window.attention = 1
+    }else if(fresh_yeet === 0){
+        window.eyeDirection = "closed";
+        window.awareness = 0;
+        window.attention = 0
+    }else{
+        alert("Got some bad, gross, green yeet! :'(");
+        console.log("Ew, yeet was: ", fresh_yeet)
+    }
+});
 
 window.eyeDirection = "closed";
 window.awareness = 1;
@@ -33,7 +31,7 @@ window.attention = 1;
 function loadVariables() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = () => {
-        if (this.readyState == 4 && this.status == 200) {
+        if (this.readyState === 4 && this.status === 200) {
             var vars = JSON.parse(this.responseText);
             console.table(vars);
         }
@@ -43,66 +41,6 @@ function loadVariables() {
 }
 
 setInterval(loadVariables, 3000);
-
-export function buildPipe(Settings) {
-  if (window.subscriptionAnimate) window.subscriptionAnimate.unsubscribe();
-
-  window.pipeAnimate$ = null;
-  window.multicastAnimate$ = null;
-  window.subscriptionAnimate = null;
-
-  // Build Pipe
-  window.pipeAnimate$ = zipSamples(window.source.eegReadings$).pipe(
-    bandpassFilter({
-      cutoffFrequencies: [Settings.cutOffLow, Settings.cutOffHigh],
-      nbChannels: window.nchans }),
-    epoch({
-      duration: Settings.duration,
-      interval: Settings.interval,
-      samplingRate: Settings.srate
-    }),
-    fft({ bins: Settings.bins }),
-    powerByBand(),
-    catchError(err => {
-      console.log(err);
-    })
-  );
-  window.multicastAnimate$ = window.pipeAnimate$.pipe(
-    multicast(() => new Subject())
-  );
-}
-
-export function setup(setData, Settings) {
-  console.log("Subscribing to " + Settings.name);
-
-  if (window.multicastAnimate$) {
-    window.subscriptionAnimate = window.multicastAnimate$.subscribe(data => {
-      setData(animateData => {
-        Object.values(animateData).forEach((channel, index) => {
-            channel.datasets[0].data = [
-              data.delta[index],
-              data.theta[index],
-              data.alpha[index],
-              data.beta[index],
-              data.gamma[index]
-            ];
-            channel.xLabels = bandLabels;
-        });
-
-        return {
-          ch0: animateData.ch0,
-          ch1: animateData.ch1,
-          ch2: animateData.ch2,
-          ch3: animateData.ch3,
-          ch4: animateData.ch4
-        };
-      });
-    });
-
-    window.multicastAnimate$.connect();
-    console.log("Subscribed to " + Settings.name);
-  }
-}
 
 export function renderModule(channels) {
   function RenderEye(pos) {
