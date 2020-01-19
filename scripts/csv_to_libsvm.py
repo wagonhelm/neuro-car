@@ -25,7 +25,13 @@ eyesOpenToClosed = ['openClosed/openclosed.csv', 'openClosed/openclosed2.csv', '
 eyesOpen = ['nicOpen1.csv', 'nicOpen2.csv', 'nicOpen3.csv', 'nicOpen4.csv', 'nicOpen5.csv', 'micah_1_Open.csv', 'micah_2_Open1.csv', 'micah_2_Open2.csv', 'JustinEyesOpen120sec01.csv', 'JustinEyesOpen120sec02.csv']
 
 noFocus = ['JustinFocus001.csv', 'JustinFocus002.csv', 'JustinFocus003.csv', 'JustinFocus004.csv', 'JustinFocus005.csv', 'JustinFocus006.csv', 'JustinFocus007.csv', 'JustinFocus008.csv']
+noFocus += ['nicNoFocus1.csv', 'nicNoFocus2.csv', 'nicNoFocus3.csv', 'nicNoFocus4.csv', 'nicNoFocus5.csv', 'nicNoFocus6.csv', 'TawsifNoFocus01.csv', 'TawsifNoFocus02.csv', 'TawsifNoFocus03.csv', 'TawsifNoFocus04.csv']
 focus = ['JustinNoFocus001.csv', 'JustinNoFocus002.csv','JustinNoFocus003.csv','JustinNoFocus004.csv','JustinNoFocus005.csv','JustinNoFocus006.csv','JustinNoFocus007.csv','JustinNoFocus008.csv']
+focus += ['TawsifFocus01.csv', 'TawsifFocus02.csv', 'TawsifFocus03.csv', 'TawsifFocus04.csv']
+
+tired = ['nicTired1.csv', 'nicTired2.csv', 'nicTired3.csv', 'nicTired4.csv', 'nicTired5.csv', 'User03Level02.csv', 'User06Level02.csv']
+mediumTired = ['User01Level01.csv', 'User02Level01.csv', 'User04Level01.csv']
+rested = ['User01Level00.csv', 'ZubierLevel00.csv']
 
 # list of class data files and associated numbers
 dataRoot = './data/'
