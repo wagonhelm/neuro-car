@@ -1,8 +1,7 @@
-import React, { useState, useCallback } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import { catchError, multicast } from "rxjs/operators";
 
-import { Card, Stack, TextContainer, RangeSlider, Select} from "@shopify/polaris";
+import { Card } from "@shopify/polaris";
 import { Subject } from "rxjs";
 
 import { zipSamples } from "muse-js";
@@ -14,18 +13,7 @@ import {
   powerByBand
 } from "@neurosity/pipes";
 
-import { chartStyles } from "../chartOptions";
-
 import { bandLabels } from "../../utils/chartUtils";
-
-import sketchBands from './sketchBands'
-import sketchTone from './sketchTone'
-import sketchCube from './sketchCube'
-import sketchFlock from './sketchFlock'
-import sketchDraw from './sketchDraw'
-import sketchFlock3D from './sketchFlock3D'
-
-import P5Wrapper from 'react-p5-wrapper';
 
 export function getSettings () {
   return {
@@ -42,6 +30,19 @@ export function getSettings () {
 window.eyeDirection = "closed";
 window.awareness = 1;
 window.attention = 1;
+function loadVariables() {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = () => {
+        if (this.readyState == 4 && this.status == 200) {
+            var vars = JSON.parse(this.responseText);
+            console.table(vars);
+        }
+    };
+    xmlhttp.open("GET", "/home/giancarlo/vars", true);
+    xmlhttp.send();
+}
+
+setInterval(loadVariables, 3000);
 
 export function buildPipe(Settings) {
   if (window.subscriptionAnimate) window.subscriptionAnimate.unsubscribe();
@@ -104,100 +105,18 @@ export function setup(setData, Settings) {
 }
 
 export function renderModule(channels) {
-  function RenderCharts() {
-
-    const bands = 'bands';
-    const tone = 'tone';
-    const cube = 'cube';
-    const flock = 'flock';
-    const draw = 'draw';
-    const flock3d = 'flock3d';
-
-    const chartTypes = [
-      { label: bands, value: bands },
-      { label: tone, value: tone },
-      { label: cube, value: cube },
-      { label: flock, value: flock },
-      { label: draw, value: draw },
-      { label: flock3d, value: flock3d }
-    ];
-
-    // for picking a new animation
-    const [selectedAnimation, setSelectedAnimation] = useState(bands);
-    const handleSelectChangeAnimation = useCallback(value => {
-      setSelectedAnimation(value);
-      console.log("Switching to: " + value);
-    }, []);
-
-    return Object.values(channels.data).map((channel, index) => {
-      if (channel.datasets[0].data) {
-        if (index === 1) {
-          // console.log( channel.datasets[0].data[2])
-          window.delta = channel.datasets[0].data[0];
-          window.theta = channel.datasets[0].data[1];
-          window.alpha = channel.datasets[0].data[2];
-          window.beta  = channel.datasets[0].data[3];
-          window.gamma = channel.datasets[0].data[4];
-        }
-      }
-
-      let thisSketch = sketchTone;
-
-      switch (selectedAnimation) {
-        case bands:
-          thisSketch = sketchBands;
-          break
-        case tone:
-          thisSketch = sketchTone;
-          break
-        case cube:
-          thisSketch = sketchCube;
-          break
-        case flock:
-          thisSketch = sketchFlock;
-          break
-        case draw:
-          thisSketch = sketchDraw;
-          break
-        case flock3d:
-          thisSketch = sketchFlock3D;
-          break
-        default: console.log("Error on switch to " + selectedAnimation)
-      }
-
-      //only left frontal channel
-      if (index === 1) {
-        return (
-          <React.Fragment key={'dum'}>
-            <Card.Section>
-              <P5Wrapper sketch={thisSketch}
-                delta={window.delta}
-                theta={window.theta}
-                alpha={window.alpha}
-                beta={window.beta}
-                gamma={window.gamma}
-              />
-            </Card.Section>
-          </React.Fragment>
-        );
-      } else {
-        return null
-      }
-    });
-  }
-
   function RenderEye(pos) {
-    if (pos.x == "-1") {
+    if (pos.x === "-1") {
       return (
         <svg width="100" height="100">
-          <ellipse cx="50" cy="50" rx="45" ry="35" stroke="black" stroke-width="4" fill="#ffcc4d" />
-          <line x1="5" y1="50" x2="95" y2="50" stroke="black" stroke-width="2"/>
+          <ellipse cx="50" cy="50" rx="45" ry="35" stroke="black" strokeWidth="4" fill="#ffcc4d" />
+          <line x1="5" y1="50" x2="95" y2="50" stroke="black" strokeWidth="2"/>
         </svg>
       );
     }
     return (
       <svg width="100" height="100">
-        <ellipse cx="50" cy="50" rx="45" ry="35" stroke="black" stroke-width="4" fill="white" />
+        <ellipse cx="50" cy="50" rx="45" ry="35" stroke="black" strokeWidth="4" fill="white" />
         <circle cx={pos.x} cy={pos.y} r="20" fill="black" />
       </svg>
     );
@@ -265,7 +184,7 @@ export function renderModule(channels) {
       <React.Fragment>
         <Card.Section>
           <div style={{fontSize: '10rem', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}}>
-            <i class="fas fa-road"></i>
+            <i className="fas fa-road"></i>
             {emoji[state]}
           </div>
         </Card.Section>
