@@ -1,84 +1,42 @@
-import {MUSE_SERVICE, MuseClient, zipSamples} from "muse-js";
-import {
-    bandpassFilter,
-    epoch,
-    fft,
-    sliceFFT
-} from "@neurosity/pipes";
-import {catchError, multicast, Subject, takeUntil, timer} from "rxjs";
-import * as rosnodejs from "rosnodejs";
+var app = require('express')();
+var http = require('http').createServer(app);
+var io = require('socket.io')(http);
 
-const noble = require('@abandonware/noble');
-const bluetooth = require('webbluetooth').bluetooth;
+const rosnodejs = require('rosnodejs');
+const std_msgs = rosnodejs.require('std_msgs');
 
+rosnodejs.initNode('/yeeter_node')
+    .then(() => {
+        const nh = rosnodejs.nh;
+        const pub = nh.advertise('/muse_filtered_data', 'std_msgs/Float64MultiArray');
 
-async function tryMuse(){
-    const NUM_CHANS = 4;
+        app.get('/', function(req, res){
+            res.sendFile(__dirname + '/client_index.html');
+        });
 
-    const museClient = new MuseClient();
-    museClient.enableAux = false;
+        app.get('/bundle.js', function(req, res){
+            res.sendFile(__dirname + '/dist/bundle.js');
+        });
 
-    console.log("Requesting device...")
-    let device = await bluetooth.requestDevice({
-        filters: [{ services: [MUSE_SERVICE] }]
+        io.on('connection', function(socket){
+            console.log('a user connected');
+
+            socket.on('yeet_data', function(data_that_has_been_yeeted){
+                console.log("YEET!")
+
+                let cleaner_yeet = []
+                cleaner_yeet.push(...data_that_has_been_yeeted.psd[0])
+                cleaner_yeet.push(...data_that_has_been_yeeted.psd[1]);
+                cleaner_yeet.push(...data_that_has_been_yeeted.psd[2])
+                cleaner_yeet.push(...data_that_has_been_yeeted.psd[3]);
+
+                // console.log(cleaner_yeet)
+
+                pub.publish(new std_msgs.msg.Float64MultiArray(cleaner_yeet));
+            });
+        });
+
+        http.listen(3000, function(){
+            console.log('listening on *:3000');
+        });
     });
-    console.log("Device found! Connecting...")
-    const gatt = await device.gatt.connect();
-
-    console.log("BT Connected!")
-    console.log("muse connecting...");
-    await museClient.connect(gatt);
-    console.log("muse connected!");
-    await museClient.start();
-    console.log("started!");
-
-    const pipeSpectra = zipSamples(museClient.eegReadings).pipe(
-        bandpassFilter({
-            cutoffFrequencies: [2, 20],
-            nbChannels: NUM_CHANS }),
-        epoch({
-            duration: 1024,
-            interval: 100,
-            samplingRate: 256
-        }),
-        fft({ bins: 256 }),
-        sliceFFT([1, 30]),
-        catchError(err => {
-            console.log(err);
-        })
-    );
-
-    const multicastSpectra = pipeSpectra.pipe(
-        multicast(() => new Subject())
-    );
-
-    const timer$ = timer(10000);
-
-    // put selected observable object into local and start taking samples
-    const localObservable = multicastSpectra.pipe(
-        takeUntil(timer$)
-    );
-
-    const nh = rosnodejs.nh;
-    const pub = nh.advertise('/muse_filtered_data', 'std_msgs/Float64MultiArray');
-
-    localObservable.subscribe({
-        next(x) {
-            pub.publish(Object.values(x));
-            // logging is useful for debugging -yup
-            console.log(x);
-        },
-        error(err) { console.log(err); },
-        complete() {
-            console.log('Done publishing!');
-            process.exit()
-        }
-    });
-}
-
-tryMuse();
-//
-// noble.on('stateChange', (state) => {
-//     if (state === 'poweredOn') {
-//     }
-// });

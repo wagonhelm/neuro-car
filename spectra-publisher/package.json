@@ -8,9 +8,14 @@
     "@babel/polyfill": "^7.8.3",
     "@neurosity/pipes": "^3.2.3",
     "babel-node": "0.0.1-security",
+    "express": "^4.17.1",
     "muse-js": "^3.1.0",
     "rosnodejs": "^3.0.1",
-    "webbluetooth": "^2.0.0"
+    "socket.io": "^2.3.0",
+    "socket.io-client": "latest",
+    "webbluetooth": "^2.0.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   },
   "scripts": {
     "yeet": "babel-node yeet.js"
