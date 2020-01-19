@@ -1,6 +1,6 @@
 import React from "react";
 import { PageSwitcher } from "../PageSwitcher/PageSwitcher";
-import { AppProvider, Card, Page, Link } from "@shopify/polaris";
+import { AppProvider, Page } from "@shopify/polaris";
 import enTranslations from "@shopify/polaris/locales/en.json";
 import * as translations from "./translations/en.json";
 
