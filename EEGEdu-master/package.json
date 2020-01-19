@@ -10,6 +10,7 @@
     "@neurosity/pipes": "^3.0.2",
     "@shopify/polaris": "^4.9.0",
     "chart.js": "^2.7.2",
+    "express": "^4.17.1",
     "file-saver": "^2.0.2",
     "firebase": "^7.5.0",
     "firebase-tools": "^7.9.0",
@@ -23,8 +24,9 @@
     "react-chartjs-2": "^2.7.2",
     "react-dom": "^16.4.1",
     "react-p5-wrapper": "^2.0.0",
-    "react-scripts": "^3.2.0",
-    "rxjs": "^6.5.3"
+    "react-scripts": "^3.3.0",
+    "rxjs": "^6.5.3",
+    "socket.io": "^2.3.0"
   },
   "scripts": {
     "start": "PORT=80 react-scripts --max_old_space_size=4096 start",
