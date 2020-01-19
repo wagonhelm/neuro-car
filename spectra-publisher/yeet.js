@@ -9,7 +9,7 @@ import {catchError, multicast, Subject, takeUntil, timer} from "rxjs";
 import * as rosnodejs from "rosnodejs";
 
 const noble = require('@abandonware/noble');
-const bluetooth = require('webbluetooth')
+const bluetooth = require('webbluetooth').bluetooth;
 
 
 async function tryMuse(){
@@ -76,8 +76,9 @@ async function tryMuse(){
     });
 }
 
-noble.on('stateChange', (state) => {
-    if (state === 'poweredOn') {
-        tryMuse();
-    }
-});
+tryMuse();
+//
+// noble.on('stateChange', (state) => {
+//     if (state === 'poweredOn') {
+//     }
+// });
