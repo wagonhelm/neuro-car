@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
 
   // publisher and subscriber
   detectionPub = priv_nh.advertise<std_msgs::Int32>("detection", 0);
-  vectorSub = priv_nh.subscribe<std_msgs::Float64MultiArray>("eeg/vector", 0, detectionCallback);
+  vectorSub = priv_nh.subscribe<std_msgs::Float64MultiArray>("/eeg/vector", 0, detectionCallback);
 
   // loop
   ros::Rate rate(fps);
