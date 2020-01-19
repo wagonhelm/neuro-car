@@ -94,7 +94,8 @@ export function renderModule() {
         let vertLim = Math.floor(Math.max(...[].concat.apply([], [window.latestSashimi[0],
             window.latestSashimi[1],
             window.latestSashimi[2],
-            window.latestSashimi[3]])
+            window.latestSashimi[3],
+            70])
         ));
         const options = {
             ...generalOptions,
@@ -114,8 +115,8 @@ export function renderModule() {
                             labelString: "Power (μV²)"
                         },
                         ticks: {
-                            max: 70,
-                            min: -70
+                            max: vertLim,
+                            min: vertLim * -1
                         }
                     }
                 ]
