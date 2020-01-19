@@ -18,14 +18,17 @@ async function tryMuse(){
     const museClient = new MuseClient();
     museClient.enableAux = false;
 
+    console.log("Requesting device...")
     let device = await bluetooth.requestDevice({
         filters: [{ services: [MUSE_SERVICE] }]
     });
+    console.log("Device found! Connecting...")
     const gatt = await device.gatt.connect();
 
-    console.log("connecting...");
+    console.log("BT Connected!")
+    console.log("muse connecting...");
     await museClient.connect(gatt);
-    console.log("connected!");
+    console.log("muse connected!");
     await museClient.start();
     console.log("started!");
 
@@ -75,6 +78,6 @@ async function tryMuse(){
 
 noble.on('stateChange', (state) => {
     if (state === 'poweredOn') {
-        connect();
+        tryMuse();
     }
 });
