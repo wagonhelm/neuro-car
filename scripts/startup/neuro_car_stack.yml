@@ -48,9 +48,9 @@ windows:
         - rename_pane 'bluetooth'; cd $NEURO_CAR_HOME/spectra-publisher; npm run yeet
 
         # SSH port forward
-        - rename_pane 'ssh_port_forward'; cd $NEURO_CAR_HOME; ssh -i hacked2020_tunnelkey.key -R 0.0.0.0:9001:localhost:3000 ubuntu@34.94.143.73
+        - rename_pane 'ssh_port_forward'; cd $HOME; ssh -i hacked2020_tunnelkey.key -R 0.0.0.0:9001:localhost:3000 ubuntu@34.94.143.73
 
         # Web server
-        <% if local_web_server == true %>
+        <% if local_web_server != false %>
         - rename_pane 'local_web_server'; cd $NEURO_CAR_HOME/EEGEdu-master; yarn run start
         <% end %>

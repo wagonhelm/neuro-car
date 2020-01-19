@@ -1,6 +1,17 @@
 # neuro-car
 HackED 2020 Competition
 
+## Web Functionality
+
+Open: http://localhost:3000/
+To select Muse2 bluetooth device
+
+Open: http://localhost:43343/
+For accessing locally hosted webserver
+
+Open: neurotech.tech
+For accessing live hosted webserver
+
 ## Summary
 
 A Muse2 EEG device is used with Fourier transforms to produce a vector of frequencies and amplitudes.
