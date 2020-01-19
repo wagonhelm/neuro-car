@@ -3,3 +3,5 @@ node_modules/
 *.libsvm
 *.model
 *.csv
+catkin_ws/build/*
+catkin_ws/devel/*

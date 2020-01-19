@@ -1,6 +1,23 @@
 # neuro-car
 HackED 2020 Competition
 
+## Summary
+
+A Muse2 EEG device is used with Fourier transforms to produce a vector of frequencies and amplitudes.
+This vector is passed into an SVM to classify brain states, which are used to control an RC car.
+
+We also measure fatigue to issue shocks to a user as a wake-up method.
+
+The SVM is trained to detect the following states, and their corresponding control mappings:
+
+eyes open -> drive forward
+eyes closed -> stop driving
+eyes left -> turn left ??
+eyes right -> turn right ??
+
+fatigue levels as measured by sleep deprivation, quantized over [0, 5]
+5 -> shock
+
 ## Support Vector Machine
 
 ### Data collection
@@ -42,3 +59,25 @@ Prediction command: `./thundersvm-predict eval.libsvm svm.model pred.vec`
 `python3 csv_to_libsvm.py 20`
 `./thundersvm-train -s 0 -t 2 -g 0.01 -c 10 train.libsvm svm.model`
 `./thundersvm-predict eval.libsvm svm.model pred.vec`
+
+## ROS Architecture
+
+ROS melodic is used for a modular architecture. CUDA 10 is required. We use the catkin build system.
+
+### SVM node
+
+Place a trained model in neuro_car/models
+
+`roslaunch neuro_car svm.launch`
+Input topic: /muse_filter_data
+Outpt topic: /svm/detection
+
+This receives EEG data and broadcasts classifications.
+
+### Car node
+
+`roslaunch neuro_car car.launch`
+Input topic: /svm/detection
+Output: direct to RC car
+
+This is a simple state machine that checks for stable classifications and issues actions to the RC car.

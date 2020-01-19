@@ -1,0 +1,4 @@
+<launch>
+    <node name="car" pkg="neuro_car" type="car" output="screen">
+    </node>
+</launch>
