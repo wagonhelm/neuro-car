@@ -169,12 +169,12 @@ export function renderModule(channels) {
         <div>{RenderEyes()}</div>
       </Card.Section>
     </Card>
-    <Card title="Awareness">
+    <Card title="Fatigue">
       <Card.Section>
         <div>{RenderAwareness()}</div>
       </Card.Section>
     </Card>
-    <Card title="Road Attention">
+    <Card title="Attention">
       <Card.Section>
         <div>{RenderAttention()}</div>
       </Card.Section>

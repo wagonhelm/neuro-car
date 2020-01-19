@@ -1,0 +1,23 @@
+Justin with eyes open/closed, sampled from ~30s
+  eval=10, train=68
+  0% accuracy with C=10, gamma=0.125
+
+Micah with eyes open/closed, sampled from ~2min
+  eval=124, train=491
+  0.959677% accuracy with C=10, gamma=0.01
+
+Temporal aggregation affects accuracy quite negatively.
+This is probably due to inconsistent wave forms and noise summing.
+gradLength = 5, accuracy ~ 65%
+gradLength = 2, accuracy ~80%
+
+Transition / quick clips do not work. There is not enough time for the EEG signal to gravitate towards the new state.
+Further, the transitions contain both traits of the original and target states, hence which dataset to attribute them to
+is unclear. Testing both ways leads to poor accuracy. Training them as separate classes also reduces accuracy of the non-transition
+states. This is probably due to the transition classes ruining the ability of hyperplanes to separate the non-transition points.
+
+Final models:
+
+eyes: gamma=0.01, C=5, 0.890% ?
+fatigue: gamma=0.0001, C=5, 0.813% ?
+focus: gamma=0.01, C=5, 0.885% ?

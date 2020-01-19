@@ -1,6 +1,17 @@
 # neuro-car
 HackED 2020 Competition
 
+## Web Functionality
+
+Open: http://localhost:3000/
+To select Muse2 bluetooth device
+
+Open: http://localhost:43343/
+For accessing locally hosted webserver
+
+Open: neurotech.tech
+For accessing live hosted webserver
+
 ## Summary
 
 A Muse2 EEG device is used with Fourier transforms to produce a vector of frequencies and amplitudes.
@@ -57,7 +68,7 @@ Prediction command: `./thundersvm-predict eval.libsvm svm.model pred.vec`
 ### Full pipeline
 
 `python3 csv_to_libsvm.py 20`
-`./thundersvm-train -s 0 -t 2 -g 0.01 -c 10 train.libsvm svm.model`
+`./thundersvm-train -s 0 -t 2 -g 0.01 -c 10 -m 2048 train.libsvm svm.model`
 `./thundersvm-predict eval.libsvm svm.model pred.vec`
 
 ## ROS Architecture

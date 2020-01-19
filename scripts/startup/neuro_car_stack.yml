@@ -1,0 +1,56 @@
+# /home/user/.config/tmuxinator/arvp_sim.yml
+
+name: neuro_stack
+root: ~/
+
+<% local_web_server = "false" %>
+<% if @args[0] %>
+  <% local_web_server = @args[0] %>
+<% end %>
+
+# Project hooks
+# Runs on project start, always
+# on_project_start: command
+# Run on project start, the first time
+# on_project_first_start: command
+# Run on project start, after the first time
+# on_project_restart: command
+# Run on project exit ( detaching from tmux session )
+# on_project_exit: command
+# Run on project stop
+# on_project_stop: command
+
+# Runs in each window and pane before window/pane specific commands
+pre_window: source $NEURO_CAR_HOME/scripts/startup/utils.sh
+# Pass command line options to tmux
+# tmux_options: -f $NEURO_CAR_HOME/scripts/startup/.tmux.conf
+
+startup_window: main
+startup_pane: 7
+
+attach: true
+
+windows:
+  - core:
+      - roscore
+  - main:
+      layout: tiled
+      panes:
+        # SVMs
+        - roslaunch_with_title neuro_car svm_eyes.launch
+        - roslaunch_with_title neuro_car svm_attention.launch
+        - roslaunch_with_title neuro_car svm_fatigue.launch
+        
+        # Cars
+        - roslaunch_with_title neuro_car car.launch
+        
+        # Bluetooth
+        - rename_pane 'bluetooth'; cd $NEURO_CAR_HOME/spectra-publisher; npm run yeet
+
+        # SSH port forward
+        - rename_pane 'ssh_port_forward'; cd $HOME; ssh -i hacked2020_tunnelkey.key -R 0.0.0.0:9001:localhost:3000 ubuntu@34.94.143.73
+
+        # Web server
+        <% if local_web_server != false %>
+        - rename_pane 'local_web_server'; cd $NEURO_CAR_HOME/EEGEdu-master; yarn run start
+        <% end %>

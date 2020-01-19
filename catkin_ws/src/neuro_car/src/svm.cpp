@@ -9,26 +9,37 @@ ros::Publisher detectionPub;
 ros::Subscriber vectorSub;
 SVC svm;
 
+int maxConsecutive = 1;
+int consecutive = 0;
+std::vector<DataSet::node> row;
+
 void detectionCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
   // fill sparse row
-  std::vector<DataSet::node> row;
   for(int i = 0; i < msg->data.size(); ++i)
   {
     row.push_back(DataSet::node(i, msg->data[i]));
   }
+  ++consecutive;
 
-  // make one row matrix
-  DataSet::node2d matrix;
-  matrix.push_back(row);
+  if(consecutive == maxConsecutive)
+  {
+    // make one row matrix
+    DataSet::node2d matrix;
+    matrix.push_back(row);
 
-  // predict classes
-  std::vector<double> estimatedClass = svm.predict(matrix, 1);
+    // predict classes
+    std::vector<double> estimatedClass = svm.predict(matrix, 1);
 
-  // publish
-  std_msgs::Int32 e;
-  e.data = estimatedClass[0];
-  detectionPub.publish(e);
+    // publish
+    std_msgs::Int32 e;
+    e.data = estimatedClass[0];
+    detectionPub.publish(e);
+
+    // clear for next batch
+    row.clear();
+    consecutive = 0;
+  }
 }
 
 int main(int argc, char** argv) {
