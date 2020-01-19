@@ -57,7 +57,7 @@ Prediction command: `./thundersvm-predict eval.libsvm svm.model pred.vec`
 ### Full pipeline
 
 `python3 csv_to_libsvm.py 20`
-`./thundersvm-train -s 0 -t 2 -g 0.01 -c 10 train.libsvm svm.model`
+`./thundersvm-train -s 0 -t 2 -g 0.01 -c 10 -m 2048 train.libsvm svm.model`
 `./thundersvm-predict eval.libsvm svm.model pred.vec`
 
 ## ROS Architecture
