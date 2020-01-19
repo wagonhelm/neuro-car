@@ -5,14 +5,14 @@ import time
 
 pulled_over = False
 
-stop_pin = 11
-forward_pin = 13
-pull_over_pin = 15
-pump_brake_pin = 19
+stop_pin = 5 #29
+forward_pin = 6 #31
+pull_over_pin = 13 #33
+pump_brake_pin = 19 #35
 
 sio = socketio.Client()
 
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(stop_pin, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(forward_pin, GPIO.OUT, initial=GPIO.LOW)
 GPIO.setup(pull_over_pin, GPIO.OUT, initial=GPIO.LOW)
