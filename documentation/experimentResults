@@ -16,3 +16,8 @@ Further, the transitions contain both traits of the original and target states, 
 is unclear. Testing both ways leads to poor accuracy. Training them as separate classes also reduces accuracy of the non-transition
 states. This is probably due to the transition classes ruining the ability of hyperplanes to separate the non-transition points.
 
+Final models:
+
+eyes: gamma=0.01, C=5, 0.890% ?
+fatigue: gamma=0.0001, C=5, 0.813% ?
+focus: gamma=0.01, C=5, 0.885% ?
