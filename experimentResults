@@ -1,0 +1,7 @@
+Justin with eyes open/closed, sampled from ~30s
+  eval=10, train=68
+  0% accuracy with C=10, gamma=0.125
+
+Micah with eyes open/closed, sampled from ~2min
+  eval=124, train=491
+  0.959677% accuracy with C=10, gamma=0.01
