@@ -121,16 +121,6 @@ export function PageSwitcher() {
     window.location.reload();
   }
 
-  function pipeSettingsDisplay() {
-    switch(selected) {
-      case animate:
-        return (
-          funAnimate.renderSliders(setAnimateData, setAnimateSettings, status, animateSettings)
-        );
-      default: console.log('Error rendering settings display');
-    }
-  }
-
   function renderModules() {
     switch (selected) {
       case animate:
@@ -191,7 +181,6 @@ export function PageSwitcher() {
           />
         </Stack>
       </Card>
-      {pipeSettingsDisplay()}
       {renderModules()}
       {renderRecord()}
     </React.Fragment>
