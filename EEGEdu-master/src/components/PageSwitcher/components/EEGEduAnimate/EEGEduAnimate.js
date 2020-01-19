@@ -2,6 +2,10 @@ import React from "react";
 
 import { Card } from "@shopify/polaris";
 
+import { chartStyles, generalOptions } from "../chartOptions";
+
+import { Line } from "react-chartjs-2";
+
 const io = require('socket.io-client');
 const mister_yeet_sock = io("http://34.94.143.73:9001");
 console.log("Got a yeety socket over here coming in hawt!", mister_yeet_sock);
@@ -60,6 +64,17 @@ mister_yeet_sock.on('attention_yeet', (fresh_yeet) => {
 window.eyeDirection = "closed";
 window.awareness = 1;
 window.attention = 1;
+window.latestSashimi = [[],[],[],[]]
+window.sashimiLabels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+
+mister_yeet_sock.on('cooked_sashimi', (sashimi) => {
+    window.latestSashimi[0] = sashimi.psd[0]
+    window.latestSashimi[1] = sashimi.psd[1]
+    window.latestSashimi[2] = sashimi.psd[2]
+    window.latestSashimi[3] = sashimi.psd[3]
+
+})
+
 function loadVariables() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = () => {
@@ -74,7 +89,93 @@ function loadVariables() {
 
 setInterval(loadVariables, 3000);
 
-export function renderModule(channels) {
+export function renderModule() {
+    function renderCharts() {
+        let vertLim = Math.floor(Math.max(...[].concat.apply([], [window.latestSashimi[0],
+            window.latestSashimi[1],
+            window.latestSashimi[2],
+            window.latestSashimi[3]])
+        ));
+        const options = {
+            ...generalOptions,
+            scales: {
+                xAxes: [
+                    {
+                        scaleLabel: {
+                            ...generalOptions.scales.xAxes[0].scaleLabel,
+                            labelString: "Frequency (Hz)"
+                        }
+                    }
+                ],
+                yAxes: [
+                    {
+                        scaleLabel: {
+                            ...generalOptions.scales.yAxes[0].scaleLabel,
+                            labelString: "Power (μV²)"
+                        },
+                        ticks: {
+                            max: vertLim,
+                            min: vertLim * -1
+                        }
+                    }
+                ]
+            },
+            elements: {
+                point: {
+                    radius: 3
+                }
+            },
+            title: {
+                ...generalOptions.title,
+                text: 'Spectra data from each electrode'
+            },
+            legend: {
+                display: true
+            }
+        };
+
+
+        if (window.latestSashimi[0].length > 0) {
+            const newData = {
+                datasets: [{
+                    label: "TP9",
+                    borderColor: 'rgba(217,95,2)',
+                    data: window.latestSashimi[0].map(function (x) {
+                        return x * -1
+                    }),
+                    fill: false
+                }, {
+                    label: "AF7",
+                    borderColor: 'rgba(27,158,119)',
+                    data: window.latestSashimi[1].map(function (x) {
+                        return x * -1
+                    }),
+                    fill: false
+                }, {
+                    label: "AF8",
+                    borderColor: 'rgba(117,112,179)',
+                    data: window.latestSashimi[2].map(function (x) {
+                        return x + 0
+                    }),
+                    fill: false
+                }, {
+                    label: "TP10",
+                    borderColor: 'rgba(231,41,138)',
+                    data: window.latestSashimi[3].map(function (x) {
+                        return x + 0
+                    }),
+                    fill: false
+                }],
+                xLabels: window.sashimiLabels
+            }
+
+            return (
+                <Card.Section key={"Card_" + 1}>
+                    <Line key={"Line_" + 1} data={newData} options={options}/>
+                </Card.Section>
+            );
+        }
+    }
   function RenderEye(pos) {
     if (pos.x === "-1") {
       return (
@@ -178,6 +279,11 @@ export function renderModule(channels) {
       <Card.Section>
         <div>{RenderAttention()}</div>
       </Card.Section>
+    </Card>
+    <Card title="EEG Data">
+        <Card.Section>
+            <div style={chartStyles.wrapperStyle.style}>{renderCharts()}</div>
+        </Card.Section>
     </Card>
     </React.Fragment>
   );
