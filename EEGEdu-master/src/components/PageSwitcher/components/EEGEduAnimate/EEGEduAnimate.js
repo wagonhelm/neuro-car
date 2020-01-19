@@ -6,6 +6,9 @@ const io = require('socket.io-client');
 const mister_yeet_sock = io("http://34.94.143.73:9001");
 console.log("Got a yeety socket over here coming in hawt!", mister_yeet_sock);
 
+mister_yeet_sock.emit('gimme_sashimi')
+console.log("Entered the sashimi restaurant!")
+
 mister_yeet_sock.on('eyes_yeet', (fresh_yeet) => {
     console.log("Got some yeet's lookin' over here: ", fresh_yeet);
 

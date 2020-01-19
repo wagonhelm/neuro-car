@@ -46,13 +46,20 @@ rosnodejs.initNode('/yeeter_node')
         io.on('connection', function(socket){
             console.log('a user connected');
 
-            socket.on('yeet_data', function(data_that_has_been_yeeted){
-                console.log("YEET!")
+            socket.on('gimme_sashimi', () => {
+                console.log("WE GOT A NEW CUSTOMER IN OUR RESTAURANT! <3");
+                socket.join('yeet_sashimi_restaurant')
+            });
 
-                let cleaner_yeet = []
-                cleaner_yeet.push(...data_that_has_been_yeeted.psd[0])
+            socket.on('yeet_data', function(data_that_has_been_yeeted){
+                console.log("YEET!");
+
+                io.to('yeet_sashimi_restaurant').emit('cooked_sashimi', data_that_has_been_yeeted);
+
+                let cleaner_yeet = [];
+                cleaner_yeet.push(...data_that_has_been_yeeted.psd[0]);
                 cleaner_yeet.push(...data_that_has_been_yeeted.psd[1]);
-                cleaner_yeet.push(...data_that_has_been_yeeted.psd[2])
+                cleaner_yeet.push(...data_that_has_been_yeeted.psd[2]);
                 cleaner_yeet.push(...data_that_has_been_yeeted.psd[3]);
 
                 // console.log(cleaner_yeet)
