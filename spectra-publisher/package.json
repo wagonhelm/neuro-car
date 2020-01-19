@@ -4,22 +4,22 @@
   "description": "Yeet? Yeet.",
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/node": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
-    "@babel/register": "^7.8.3",
-    "@babel/runtime": "^7.8.3",
+    "@abandonware/noble": "^1.9.2-5",
+    "@babel/polyfill": "^7.8.3",
     "@neurosity/pipes": "^3.2.3",
-    "babel-preset-es2016": "^6.24.1",
-    "bleat": "^0.1.9",
+    "babel-node": "0.0.1-security",
     "muse-js": "^3.1.0",
-    "noble": "^1.9.1",
-    "rosnodejs": "^3.0.1"
+    "rosnodejs": "^3.0.1",
+    "webbluetooth": "^2.0.0"
   },
   "scripts": {
     "yeet": "babel-node yeet.js"
   },
   "devDependencies": {
-    "@babel/plugin-transform-runtime": "^7.8.3"
+    "@babel/cli": "^7.8.3",
+    "@babel/core": "^7.8.3",
+    "@babel/node": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.3"
   }
 }

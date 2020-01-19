@@ -8,8 +8,8 @@ import {
 import {catchError, multicast, Subject, takeUntil, timer} from "rxjs";
 import * as rosnodejs from "rosnodejs";
 
-const noble = require('noble');
-const bluetooth = require('bleat').webbluetooth;
+const noble = require('@abandonware/noble');
+const bluetooth = require('webbluetooth')
 
 
 async function tryMuse(){
