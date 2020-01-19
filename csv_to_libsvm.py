@@ -17,11 +17,15 @@ assert(int(sys.argv[1]) in range(0, 100+1))
 evalPercent = int(sys.argv[1])
 print("Percentage mapped to evaluation: {}".format(evalPercent))
 
+# file lists
+eyesClosed = ['nicClosed1.csv, nicClosed2.csv, nicClosed3.csv, nicClosed4.csv, micah_1_Closed.csv', 'micah_2_Closed1.csv', 'micah_2_Closed2.csv']
+eyesOpen = ['nicOpen1.csv', 'nicOpen2.csv', 'nicOpen3.csv', 'nicOpen4.csv', 'nicOpen5.csv', 'micah_1_Open.csv', 'micah_2_Open1.csv', 'micah_2_Open2.csv']
+
 # list of class data files and associated numbers
 dataRoot = './data/'
 typeDict = {
-  'eyesClosed' : ['0', ['micah_1_Closed.csv']],
-  'eyesOpen' : ['1', ['nicOpen1.csv', 'nicOpen2.csv', 'nicOpen3.csv', 'nicOpen4.csv', 'micah_1_Open.csv']]
+  'eyesClosed' : ['0', eyesClosed],
+  'eyesOpen' : ['1', eyesOpen]
 }
 
 # output files
