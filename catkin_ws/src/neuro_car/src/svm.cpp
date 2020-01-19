@@ -21,7 +21,6 @@ void detectionCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
     row.push_back(DataSet::node(i, msg->data[i]));
   }
   ++consecutive;
-  ROS_INFO("%i", consecutive);
 
   if(consecutive == maxConsecutive)
   {

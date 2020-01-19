@@ -42,7 +42,7 @@ rosnodejs.initNode('/yeeter_node')
 
                 // console.log(cleaner_yeet)
 
-                pub.publish(new std_msgs.msg.Float64MultiArray(cleaner_yeet));
+                pub.publish( new std_msgs.msg.Float64MultiArray({ data: cleaner_yeet }) );
             });
         });
 

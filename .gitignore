@@ -2,3 +2,4 @@ build/
 node_modules/
 catkin_ws/build/*
 catkin_ws/devel/*
+*.key

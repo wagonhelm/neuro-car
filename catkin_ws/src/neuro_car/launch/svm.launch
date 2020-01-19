@@ -1,9 +1,0 @@
-<launch>
-    <arg name="fps" default="10" />
-    <arg name="model" default="$(find neuro_car)/models/svm.model" />
-
-    <node name="svm" pkg="neuro_car" type="svm" output="screen">
-        <param name="fps" type="int" value="$(arg fps)" />
-        <param name="model" type="string" value="$(arg model)" />
-    </node>
-</launch>
