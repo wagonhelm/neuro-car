@@ -15,8 +15,6 @@ import {
 
 import { chartStyles } from "../chartOptions";
 
-import * as generalTranslations from "../translations/en";
-import * as specificTranslations from "./translations/en";
 import { bandLabels } from "../../utils/chartUtils";
 
 import sketchBands from './sketchBands'
@@ -40,6 +38,10 @@ export function getSettings () {
   }
 };
 
+window.eyeDirection = "closed";
+window.awareness = 1;
+window.attention = 1;
+
 export function buildPipe(Settings) {
   if (window.subscriptionAnimate) window.subscriptionAnimate.unsubscribe();
 
@@ -49,8 +51,8 @@ export function buildPipe(Settings) {
 
   // Build Pipe
   window.pipeAnimate$ = zipSamples(window.source.eegReadings$).pipe(
-    bandpassFilter({ 
-      cutoffFrequencies: [Settings.cutOffLow, Settings.cutOffHigh], 
+    bandpassFilter({
+      cutoffFrequencies: [Settings.cutOffLow, Settings.cutOffHigh],
       nbChannels: window.nchans }),
     epoch({
       duration: Settings.duration,
@@ -136,7 +138,7 @@ export function renderModule(channels) {
           window.beta  = channel.datasets[0].data[3];
           window.gamma = channel.datasets[0].data[4];
         }
-      }   
+      }
 
       let thisSketch = sketchTone;
 
@@ -166,24 +168,14 @@ export function renderModule(channels) {
       if (index === 1) {
         return (
           <React.Fragment key={'dum'}>
-            <Card.Section 
-              title={"Choice of Sketch"}
-            >
-              <Select
-                label={""}
-                options={chartTypes}
-                onChange={handleSelectChangeAnimation}
-                value={selectedAnimation}
-              />
-            </Card.Section>
             <Card.Section>
-              <P5Wrapper sketch={thisSketch} 
+              <P5Wrapper sketch={thisSketch}
                 delta={window.delta}
                 theta={window.theta}
                 alpha={window.alpha}
                 beta={window.beta}
                 gamma={window.gamma}
-              />          
+              />
             </Card.Section>
           </React.Fragment>
         );
@@ -193,81 +185,107 @@ export function renderModule(channels) {
     });
   }
 
-  return (
-    <Card title={specificTranslations.title}>
+  function RenderEye(pos) {
+    if (pos.x == "-1") {
+      return (
+        <svg width="100" height="100">
+          <ellipse cx="50" cy="50" rx="45" ry="35" stroke="black" stroke-width="4" fill="#ffcc4d" />
+          <line x1="5" y1="50" x2="95" y2="50" stroke="black" stroke-width="2"/>
+        </svg>
+      );
+    }
+    return (
+      <svg width="100" height="100">
+        <ellipse cx="50" cy="50" rx="45" ry="35" stroke="black" stroke-width="4" fill="white" />
+        <circle cx={pos.x} cy={pos.y} r="20" fill="black" />
+      </svg>
+    );
+  }
 
+  function RenderEyes(state) {
+    let pupilCenter = {
+                        up: {
+                          x: "50",
+                          y: "35"
+                        },
+                        down: {
+                          x: "50",
+                          y: "65"
+                        },
+                        left: {
+                          x: "30",
+                          y: "50"
+                        },
+                        right: {
+                          x: "70",
+                          y: "50"
+                        },
+                        center: {
+                          x: "50",
+                          y: "50"
+                        },
+                        closed: {
+                          x: "-1",
+                          y: "-1",
+                        }
+                      };
+
+    return (
+      <React.Fragment>
+        <Card.Section>
+          <div style={{fontSize: '10rem', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            {RenderEye(pupilCenter[state])}
+            {RenderEye(pupilCenter[state])}
+          </div>
+        </Card.Section>
+      </React.Fragment>
+    );
+  }
+
+  function RenderAwareness(state) {
+    let emoji = ['🙁', '😐', '🙂'];
+    return (
+      <React.Fragment>
+        <Card.Section>
+          <div style={{fontSize: '10rem', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly', height: '100px'}}>
+            {emoji[state]}
+          </div>
+        </Card.Section>
+      </React.Fragment>
+    );
+  }
+
+  function RenderAttention(state) {
+    let emoji = ['❌', '✅'];
+    return (
+      <React.Fragment>
+        <Card.Section>
+          <div style={{fontSize: '10rem', display: 'flex', alignItems: 'center', justifyContent: 'space-evenly'}}>
+            <i class="fas fa-road"></i>
+            {emoji[state]}
+          </div>
+        </Card.Section>
+      </React.Fragment>
+    );
+  }
+
+  return (
+    <React.Fragment>
+    <Card title="Eyes">
       <Card.Section>
-        <Stack>
-          <TextContainer>
-            <p>{specificTranslations.description}</p>
-          </TextContainer>
-        </Stack>
-      </Card.Section>
-      <Card.Section>
-        <div style={chartStyles.wrapperStyle.style}>{RenderCharts()}</div>
+        <div>{RenderEyes(window.eyeDirection)}</div>
       </Card.Section>
     </Card>
+    <Card title="Awareness">
+      <Card.Section>
+        <div>{RenderAwareness(window.awareness)}</div>
+      </Card.Section>
+    </Card>
+    <Card title="Road Attention">
+      <Card.Section>
+        <div>{RenderAttention(window.attention)}</div>
+      </Card.Section>
+    </Card>
+    </React.Fragment>
   );
 }
-
-export function renderSliders(setData, setSettings, status, Settings) {
-
-  function resetPipeSetup(value) {
-    buildPipe(Settings);
-    setup(setData, Settings);
-  }
-
-  function handleIntervalRangeSliderChange(value) {
-    setSettings(prevState => ({...prevState, interval: value}));
-    resetPipeSetup();
-  }
-
-  function handleCutoffLowRangeSliderChange(value) {
-    setSettings(prevState => ({...prevState, cutOffLow: value}));
-    resetPipeSetup();
-  }
-
-  function handleCutoffHighRangeSliderChange(value) {
-    setSettings(prevState => ({...prevState, cutOffHigh: value}));
-    resetPipeSetup();
-  }
-
-  function handleDurationRangeSliderChange(value) {
-    setSettings(prevState => ({...prevState, duration: value}));
-    resetPipeSetup();
-  }
-
-  return (
-    <Card title={Settings.name + ' Settings'} sectioned>
-      <RangeSlider 
-        disabled={status === generalTranslations.connect}
-        min={128} step={128} max={4096} 
-        label={'Epoch duration (Sampling Points): ' + Settings.duration} 
-        value={Settings.duration} 
-        onChange={handleDurationRangeSliderChange} 
-      />
-      <RangeSlider 
-        disabled={status === generalTranslations.connect}
-        min={10} step={5} max={Settings.duration} 
-        label={'Sampling points between epochs onsets: ' + Settings.interval} 
-        value={Settings.interval} 
-        onChange={handleIntervalRangeSliderChange} 
-      />
-      <RangeSlider 
-        disabled={status === generalTranslations.connect}
-        min={.01} step={.5} max={Settings.cutOffHigh - .5} 
-        label={'Cutoff Frequency Low: ' + Settings.cutOffLow + ' Hz'} 
-        value={Settings.cutOffLow} 
-        onChange={handleCutoffLowRangeSliderChange} 
-      />
-      <RangeSlider 
-        disabled={status === generalTranslations.connect}
-        min={Settings.cutOffLow + .5} step={.5} max={Settings.srate/2} 
-        label={'Cutoff Frequency High: ' + Settings.cutOffHigh + ' Hz'} 
-        value={Settings.cutOffHigh} 
-        onChange={handleCutoffHighRangeSliderChange} 
-      />
-    </Card>
-  )
-}
-
