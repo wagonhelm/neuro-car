@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import ReactDOM from "react-dom";
 import { catchError, multicast } from "rxjs/operators";
 
 import { Card, Stack, TextContainer, RangeSlider, Select} from "@shopify/polaris";
@@ -202,7 +203,8 @@ export function renderModule(channels) {
     );
   }
 
-  function RenderEyes(state) {
+  function RenderEyes() {
+    let state = window.eyeDirection;
     let pupilCenter = {
                         up: {
                           x: "50",
@@ -242,7 +244,8 @@ export function renderModule(channels) {
     );
   }
 
-  function RenderAwareness(state) {
+  function RenderAwareness() {
+    let state = window.awareness;
     let emoji = ['🙁', '😐', '🙂'];
     return (
       <React.Fragment>
@@ -255,7 +258,8 @@ export function renderModule(channels) {
     );
   }
 
-  function RenderAttention(state) {
+  function RenderAttention() {
+    let state = window.attention;
     let emoji = ['❌', '✅'];
     return (
       <React.Fragment>
@@ -273,17 +277,17 @@ export function renderModule(channels) {
     <React.Fragment>
     <Card title="Eyes">
       <Card.Section>
-        <div>{RenderEyes(window.eyeDirection)}</div>
+        <div>{RenderEyes()}</div>
       </Card.Section>
     </Card>
     <Card title="Awareness">
       <Card.Section>
-        <div>{RenderAwareness(window.awareness)}</div>
+        <div>{RenderAwareness()}</div>
       </Card.Section>
     </Card>
     <Card title="Road Attention">
       <Card.Section>
-        <div>{RenderAttention(window.attention)}</div>
+        <div>{RenderAttention()}</div>
       </Card.Section>
     </Card>
     </React.Fragment>
