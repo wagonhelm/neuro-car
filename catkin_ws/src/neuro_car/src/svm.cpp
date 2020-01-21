@@ -4,42 +4,45 @@
 #include <thundersvm/model/svc.h>
 #include <neuro_car/sigint_handler.h>
 #include <vector>
+#include <string>
 
 ros::Publisher detectionPub;
 ros::Subscriber vectorSub;
 SVC svm;
 
-int maxConsecutive = 1;
-int consecutive = 0;
 std::vector<DataSet::node> row;
+std::string mode;
 
 void detectionCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
   // fill sparse row
-  for(int i = 0; i < msg->data.size(); ++i)
+  if(mode == "eyes_alpha")
   {
-    row.push_back(DataSet::node(i, msg->data[i]));
+    for(int i = 0; i < 13; ++i)
+    {
+      row.push_back(DataSet::node(i, msg->data[i]));
+    }
   }
-  ++consecutive;
-
-  if(consecutive == maxConsecutive)
+  else
   {
-    // make one row matrix
-    DataSet::node2d matrix;
-    matrix.push_back(row);
-
-    // predict classes
-    std::vector<double> estimatedClass = svm.predict(matrix, 1);
-
-    // publish
-    std_msgs::Int32 e;
-    e.data = estimatedClass[0];
-    detectionPub.publish(e);
-
-    // clear for next batch
-    row.clear();
-    consecutive = 0;
+    for(int i = 0; i < 120; ++i)
+    {
+      row.push_back(DataSet::node(i, msg->data[i]));
+    }
   }
+
+  // make one row matrix
+  DataSet::node2d matrix;
+  matrix.push_back(row);
+  row.clear();
+
+  // predict classes
+  std::vector<double> estimatedClass = svm.predict(matrix, 1);
+
+  // publish
+  std_msgs::Int32 e;
+  e.data = estimatedClass[0];
+  detectionPub.publish(e);
 }
 
 int main(int argc, char** argv) {
@@ -55,6 +58,10 @@ int main(int argc, char** argv) {
   std::string modelPath;
   if (!priv_nh.getParam("model", modelPath)) {
     ROS_FATAL("Model path parameter could not be parsed or was not given.");
+    return 1;
+  }
+  if(!priv_nh.getParam("mode", mode)) {
+    ROS_FATAL("Mode parameter could not be parsed or was not given.");
     return 1;
   }
 

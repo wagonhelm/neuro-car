@@ -1,4 +1,7 @@
 <launch>
+    <arg name="fps" default="10" />
+
     <node name="car" pkg="neuro_car" type="car" output="screen">
+        <param name="fps" type="int" value="$(arg fps)" />
     </node>
 </launch>

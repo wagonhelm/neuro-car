@@ -21,3 +21,11 @@ Final models:
 eyes: gamma=0.01, C=5, 0.890% ?
 fatigue: gamma=0.0001, C=5, 0.813% ?
 focus: gamma=0.01, C=5, 0.885% ?
+
+Alpha isolation:
+
+alpha=1-11Hz
+TP9 = channel0 (left ear)
+AF7 = channel1 (left forehead)
+AF8 = channel2 (right forehead)
+TP10 = channel3 (right ear)

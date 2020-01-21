@@ -11,7 +11,7 @@ rosnodejs.initNode('/yeeter_node')
         const pub = nh.advertise('/muse_filtered_data', 'std_msgs/Float64MultiArray');
 
         // Set up an UBER-YEET subscriber to the MIGHTY YEET ROS MASTER'S classification of YEET:
-        nh.subscribe('/svm_fatigue/detection', 'std_msgs/Int32', (yeety_detection_data => {
+        nh.subscribe('/car/fatigue', 'std_msgs/Int32', (yeety_detection_data => {
             // We are receiving a new YEETY SVM detection! Yeet, am I right?!
 
             console.log("WE GOT A FATIGUED YEETER IN THE HOUSE! Force-feed them an Awake Chocolate ASAP!", yeety_detection_data);
@@ -19,7 +19,7 @@ rosnodejs.initNode('/yeeter_node')
             io.emit('fatigue_yeet', yeety_detection_data.data);
         }));
 
-        nh.subscribe('/svm_eyes/detection', 'std_msgs/Int32', (yeety_detection_data => {
+        nh.subscribe('/car/eyes', 'std_msgs/Int32', (yeety_detection_data => {
             // We are receiving a new YEETY SVM detection! Yeet, am I right?!
 
             console.log("We have EYES ON THE YEET!", yeety_detection_data);
@@ -27,7 +27,7 @@ rosnodejs.initNode('/yeeter_node')
             io.emit('eyes_yeet', yeety_detection_data.data);
         }));
 
-        nh.subscribe('/svm_attention/detection', 'std_msgs/Int32', (yeety_detection_data => {
+        nh.subscribe('/car/attention', 'std_msgs/Int32', (yeety_detection_data => {
             // We are receiving a new YEETY SVM detection! Yeet, am I right?!
 
             console.log("GIVE ME A Y! GIVE ME AN E! GIVE ME AN E! GIVE ME A T! What does that spell? Attention!?", yeety_detection_data);

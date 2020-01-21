@@ -38,13 +38,11 @@ mediumTired = ['User01Level01.csv', 'User02Level01.csv', 'User04Level01.csv']
 tired = ['nicTired4.csv', 'Justin2minLevel02.csv', 'JustinLevel02.csv']
 
 # list of class data files and associated numbers
-"""
 dataRoot = './data/eyesOpenClosed/'
 typeDict = {
   'eyesClosed' : ['0', eyesClosed],
   'eyesOpen' : ['1', eyesOpen],
 }
-"""
 
 """
 dataRoot = './data/roadAwareness/'
@@ -54,12 +52,14 @@ typeDict = {
 }
 """
 
+"""
 dataRoot = './data/fatigue/'
 typeDict = {
   'awake' : ['0', awake],
   'mediumTired' : ['1', mediumTired],
   'tired' : ['2', tired]
 }
+"""
 
 # output files
 trainOut = open("train.libsvm", 'w')
@@ -70,7 +70,8 @@ totalTrain = 0
 totalEval = 0
 
 colCap = 120
-gradLength = 1
+
+#gradLength = 1
 
 # iterate classes
 for key in typeDict:
@@ -83,10 +84,14 @@ for key in typeDict:
       print("Invalid file: {}".format(dataRoot + name))
       sys.exit(0)
 
-    # extraneous columns
-    del partDf['Timestamp (ms)']
-    del partDf['info']
+    # isolate alpha for eyes open/closed
+    partDf = partDf.loc[:, "ch0_1Hz":"ch0_13Hz"]
 
+    # extraneous columns
+    #del partDf['Timestamp (ms)']
+    #del partDf['info']
+
+    """
     # aggregate consecutive rows into "gradient points"
     aggDf = pd.DataFrame(columns=range(0,colCap*gradLength))
     for r in range(0, partDf.shape[0], gradLength):
@@ -95,8 +100,10 @@ for key in typeDict:
         for s in range(0, gradLength):
           aggRow += list(partDf.iloc[r+s,:colCap])
         aggDf.loc[aggDf.shape[0]] = aggRow
+    """
 
-    df = df.append(aggDf, ignore_index=True)
+    # df = df.append(aggDf, ignore_index=True)
+    df = df.append(partDf, ignore_index=True)
   print("{} instances of class {}".format(df.shape[0], typeDict[key][0]))
 
   # iterate data points (rows)
@@ -104,7 +111,8 @@ for key in typeDict:
   colNames = list(df)
   for i in range(df.shape[0]):
     line = classInteger + ' '
-    for j in range(colCap * gradLength):
+    # for j in range(colCap * gradLength)
+    for j in range(min(df.shape[1], colCap)):
       line += str(j) + ':' + str(df[colNames[j]][i]) + ' '
     
     # split distribution
