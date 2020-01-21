@@ -6,4 +6,4 @@ function render() {
     ReactDOM.render(<App />, document.getElementById("root"));
 }
 
-setInterval(render, 500);
+setInterval(render, 5);
