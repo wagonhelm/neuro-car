@@ -9,7 +9,7 @@ To select Muse2 bluetooth device
 Open: http://localhost:43343/
 For accessing locally hosted webserver
 
-Open: neurotech.tech
+Open: http://neurotransmitter.tech/
 For accessing live hosted webserver
 
 ## Summary
