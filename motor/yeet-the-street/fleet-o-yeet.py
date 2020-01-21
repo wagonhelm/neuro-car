@@ -2,8 +2,7 @@ import sys
 import socketio
 import Jetson.GPIO as GPIO
 import time
-
-pulled_over = False
+import requests
 
 stop_pin = 5 #29
 forward_pin = 6 #31
@@ -38,7 +37,7 @@ def disconect():
 def fatigue_yeet(data):
 	print("Got fatigue yeet data: {}".format(data))
 	GPIO.output(stop_pin, GPIO.LOW)
-	GPIO.output(forward_pin, GPIO.LOW)
+	#GPIO.output(forward_pin, GPIO.LOW)
 	GPIO.output(pull_over_pin, GPIO.LOW)
 	GPIO.output(pump_brake_pin, GPIO.LOW)
 	
@@ -54,6 +53,7 @@ def eyes_yeet(data):
 		GPIO.output(stop_pin, GPIO.LOW)
 		GPIO.output(pull_over_pin, GPIO.LOW)
 	if data == 0:
+		requests.get("https://maker.ifttt.com/trigger/yeet/with/key/RZTCKKK2BHHJSTskhqM2q")
 		GPIO.output(forward_pin, GPIO.LOW)
 		GPIO.output(stop_pin, GPIO.LOW)
 		GPIO.output(pull_over_pin, GPIO.LOW)
