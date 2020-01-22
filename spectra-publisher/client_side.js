@@ -36,7 +36,7 @@ async function tryMuse(){
             nbChannels: NUM_CHANS }),
         epoch({
             duration: 1024,
-            interval: 100,
+            interval: 40,
             samplingRate: 256
         }),
         fft({ bins: 256 }),
