@@ -1,5 +1,5 @@
 # YeetMind
-[![MIT license](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/kylemath/EEGEdu/blob/master/LICENSE)
+[![MIT license](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/wagonhelm/neuro-car/blob/master/LICENSE)
 
 HackED 2020 Competition
 
