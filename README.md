@@ -1,4 +1,4 @@
-# YeetMind
+# YeetMind 🧠
 [![MIT license](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/wagonhelm/neuro-car/blob/master/LICENSE)
 
 HackED 2020 Competition
@@ -13,7 +13,7 @@ Open:
 
 [For accessing live hosted webserver](http://neurotransmitter.tech/)
 
-## Summary
+## Summary :book:
 
 A Muse2 EEG device is used with Fourier transforms to produce a vector of frequencies and amplitudes.
 This vector is passed into an SVM to classify brain states, which are used to control an RC car.
@@ -22,17 +22,17 @@ We also measure fatigue to issue shocks to a user as a wake-up method.
 
 The SVM is trained to detect the following states, and their corresponding control mappings:
 
-eyes open -> drive forward
-eyes closed -> stop driving
-eyes left -> turn left ??
-eyes right -> turn right ??
++ eyes open :arrow_right: drive forward
++ eyes closed :arrow_right: stop driving
++ eyes left :arrow_right: turn left ??
++ eyes right :arrow_right: turn right ??
 
 fatigue levels as measured by sleep deprivation, quantized over [0, 5]
 5 -> shock
 
 ## Support Vector Machine
 
-### Data collection
+### Data collection :1234:
 
 Collect data with Muse2, export to CSV. Each CSV represents a time interval resultant from a Fourier transform.
 Empirically, at least 2 minutes of data per state is required for >80% classification accuracy.
@@ -86,7 +86,7 @@ Outpt topic: /svm/detection
 
 This receives EEG data and broadcasts classifications.
 
-### Car node
+### Car node :car:
 
 `roslaunch neuro_car car.launch`
 Input topic: /svm/detection
