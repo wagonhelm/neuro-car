@@ -1,16 +1,17 @@
-# neuro-car
+# YeetMind
+[![MIT license](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/kylemath/EEGEdu/blob/master/LICENSE)
+
 HackED 2020 Competition
 
 ## Web Functionality
 
-Open: http://localhost:3000/
-To select Muse2 bluetooth device
+Open:
 
-Open: http://localhost:43343/
-For accessing locally hosted webserver
+[To select Muse2 bluetooth device](http://localhost:3000/)
 
-Open: http://neurotransmitter.tech/
-For accessing live hosted webserver
+[For accessing locally hosted webserver](http://localhost:43343/)
+
+[For accessing live hosted webserver](http://neurotransmitter.tech/)
 
 ## Summary
 
@@ -43,15 +44,15 @@ This will produce .libsvm files. Do not add empty lines to these files as this w
 
 ### Training
 
-ThunderSVM is used with C-SVM for multiple class detection: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/index.md
-It must be compiled from source for CUDA 10 support: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/get-started.md#installation
-Parameters: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/parameters.md
+[ThunderSVM](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/index.md) is used with C-SVM for multiple class detection.
+It must be [compiled from source](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/get-started.md#installation) for CUDA 10 support.
+[These are the parameters.](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/parameters.md)
 
 The relevant variables are gamma and C.
 
-Reducing C will reduce the error margin on hyperplane placement during training: https://stats.stackexchange.com/questions/31066/what-is-the-influence-of-c-in-svms-with-linear-kernel
+Reducing C will reduce the error margin on hyperplane placement during training: [Stack Exchange](https://stats.stackexchange.com/questions/31066/what-is-the-influence-of-c-in-svms-with-linear-kernel)
 Gamma affects projection from "non-linear" space to linear space. Higher gamma results in smoother non-linear projection.
-Additional information on C and gamma: https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine
+Additional information on C and gamma: [Quora](https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine)
 
 These parameters are best found using a grid search.
 
