@@ -4,6 +4,7 @@
 #include <math.h>
 #include <list>
 #include <neuro_car/gpio.h>
+#include <stdlib.h>
 
 // note that ROS handles the controlCallback in series, so mutexes are unnecessary
 
@@ -18,12 +19,18 @@ std::list<int> closedBuffer={1,1,1,1,1,1,1,1,1,1};
 ros::Subscriber svmEyesSub, svmFatigueSub, svmAttentionSub;
 ros::Publisher eyesPub, fatiguePub, attentionPub;
 
-int forwardPin = PIN_7;
-int pullOverPin = PIN_11;
+int leftForwardPin = PIN_19;
+int rightForwardPin = PIN_21;
 
 void eyesCallback(const std_msgs::Int32::ConstPtr& msg)
 {
-    std::cout << "received " << static_cast<int>(msg->data) << std::endl;
+    if (static_cast<int>(msg->data) == 1) {
+        std::cout << "open" << std::endl;
+    }
+    else {
+        std::cout << "closed" << std::endl;
+    }
+
     eyesBuffer.push_back(static_cast<int>(msg->data));
     closedBuffer.push_back(static_cast<int>(msg->data));
     if(eyesBuffer.size() > maxBufferLen)
@@ -55,16 +62,23 @@ void eyesCallback(const std_msgs::Int32::ConstPtr& msg)
     std_msgs::Int32 e;
     e.data = static_cast<int>(std::round(avg));
     eyesPub.publish(e);
-    std::cout << "publishing " << e.data << std::endl;
 
     // Maintain buffer of eyes closed
 
-    if (closed_avg <= 0.1) {
-        std::cout << "pull over" << std::endl;
-        gpio_write(forwardPin, LOW);
-        gpio_write(pullOverPin, HIGH);
-        ros::Duration(2.0).sleep();
-        gpio_write(pullOverPin, LOW);
+    if (closed_avg <= 0.2) {
+        std::cout << " ----------- pull over ------------" << std::endl;
+        gpio_write(leftForwardPin, HIGH);
+        ros::Duration(0.4).sleep();
+        gpio_write(rightForwardPin, HIGH);
+        ros::Duration(1).sleep();
+        gpio_write(leftForwardPin, LOW);
+        ros::Duration(0.3).sleep();
+        gpio_write(rightForwardPin, LOW);
+        std::cout << " ----------- SHOCKING ------------" << std::endl;
+        std::string shock = "curl https://maker.ifttt.com/trigger/yeet/with/key/RZTCKKK2BHHJSTskhqM2q";
+        const char *command = shock.c_str();
+        system(command);
+        ros::Duration(10).sleep();
         closedBuffer.pop_front();
         closedBuffer.pop_front();
         closedBuffer.pop_front();
@@ -78,15 +92,15 @@ void eyesCallback(const std_msgs::Int32::ConstPtr& msg)
     }
 
     if (e.data == 1) {
-        std::cout << "forward" << std::endl;
-        gpio_write(forwardPin, HIGH);
-        gpio_write(pullOverPin, LOW);
+        gpio_write(leftForwardPin, LOW);
+        gpio_write(rightForwardPin, LOW);
+
     }
 
     else {
-        std::cout << "stop" << std::endl;
-        gpio_write(forwardPin, LOW);
-        gpio_write(pullOverPin, LOW);
+        gpio_write(leftForwardPin, LOW);
+        gpio_write(rightForwardPin, LOW);
+
     }
 }
 
@@ -142,12 +156,12 @@ int main(int argc, char** argv) {
     }
 
     // Initialize Pins
-    gpio_export(forwardPin);
-    gpio_export(pullOverPin);
-    gpio_set_dir(forwardPin, OUTPUT);
-    gpio_set_dir(pullOverPin, OUTPUT);
-    gpio_write(forwardPin, LOW);
-    gpio_write(pullOverPin, LOW);
+    gpio_export(leftForwardPin);
+    gpio_export(rightForwardPin);
+    gpio_set_dir(leftForwardPin, OUTPUT);
+    gpio_set_dir(rightForwardPin, OUTPUT);
+    gpio_write(leftForwardPin, LOW);
+    gpio_write(rightForwardPin, LOW);
 
     // log
     ROS_INFO("Running at FPS: %d", fps);
