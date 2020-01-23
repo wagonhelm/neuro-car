@@ -6,62 +6,12 @@
  * Jetson Nano GPIO library to access input and output fucntions on the pin headers
  */
 
-#ifndef GPIO_H
-#define GPIO_H
+#include <fcntl.h>
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
-// GPIO system file directory
-#define SYSFS_GPIO_DIR 			"/sys/class/gpio"
-#define SYSFS_GPIO_EXPORT		"export"
-#define SYSFS_GPIO_UNEXPORT		"unexport"
-#define SYSFS_GPIO_DIRECTION	"direction"
-#define SYSFS_GPIO_VALUE 		"value"
-#define SYSFS_GPIO_EDGE			"edge"
-#define SYSFS_GPIO_ACTIVE_LOW	"active_low"
-
-// Max buffer length to write to system files
-#define MAX_BUF 64
-
-// GPIO Pin mapping flags
-#define PIN_7	216
-#define PIN_11	50
-#define PIN_12	79
-#define PIN_13	14
-#define PIN_15	194
-#define PIN_16	232
-#define PIN_18	15
-#define PIN_19	16
-#define PIN_21	17
-#define PIN_22	13
-#define PIN_23	18
-#define PIN_24	19
-#define PIN_26	20
-#define PIN_29	149
-#define PIN_31	200
-#define PIN_32	168
-#define PIN_33	38
-#define PIN_35	76
-#define PIN_36	51
-#define PIN_37	12
-#define PIN_38	77
-#define PIN_40	78
-
-// GPIO Direction mapping flags
-#define OUTPUT	0
-#define INPUT	1
-
-// GPIO Value mapping flags
-#define LOW 	0
-#define HIGH	1
-
-// GPIO Edge mapping flags
-#define NONE 	"none"
-#define RISING	"rising"
-#define FALLING	"falling"
-#define BOTH	"both"
-
-// GPIO Active low mapping flags
-#define FALSE	0
-#define TRUE	1
+#include <neuro_car/gpio.h>
 
 /**
  * @brief Export control of userspace to file
@@ -72,7 +22,22 @@
  *
  * @return 0 on success, or -1 on failure and errno is set
  */
-int gpio_export(unsigned int gpio);
+int gpio_export(unsigned int gpio) {
+	
+	int fd, len;
+	char buf[MAX_BUF];
+
+	fd = gpio_fd_open(gpio, SYSFS_GPIO_EXPORT, O_WRONLY);
+	if (fd < 0) {
+		return fd;
+	}
+
+	len = sprintf(buf, "%d", gpio);
+	write(fd, buf, len);
+	close(fd);
+
+	return 0;
+}
 
 /**
  * @brief Return control of userspace to kernel
@@ -83,7 +48,22 @@ int gpio_export(unsigned int gpio);
  *
  * @return 0 on success, or -1 on failure and errno is set
  */
-int gpio_unexport(unsigned int gpio);
+int gpio_unexport(unsigned int gpio) {
+
+	int fd, len;
+	char buf[MAX_BUF];
+
+	fd = gpio_fd_open(gpio, SYSFS_GPIO_UNEXPORT, O_WRONLY);
+	if (fd < 0) {
+		return fd;
+	}
+
+	len = sprintf(buf, "%d", gpio);
+	write(fd, buf, len);
+	close(fd);
+
+	return 0;
+}
 
 /**
  * @breif Assign GPIO pin as INPUT/OUTPUT
@@ -95,7 +75,23 @@ int gpio_unexport(unsigned int gpio);
  *
  * @return 0 on success, or -1 on failure and errno is set
  */
-int gpio_set_dir(unsigned int gpio, unsigned int direction);
+int gpio_set_dir(unsigned int gpio, unsigned int direction) {
+	
+	int fd = gpio_fd_open(gpio, SYSFS_GPIO_DIRECTION, O_WRONLY);
+	if (fd < 0) {
+		return fd;
+	}
+
+	if (direction == OUTPUT) {
+		write(fd, "out", 4);
+	} else {
+		write(fd, "in", 3);
+	}
+
+	close(fd);
+
+	return 0;
+}
 
 /**
  * @brief Set GPIO value to HIGH/LOW
@@ -107,7 +103,23 @@ int gpio_set_dir(unsigned int gpio, unsigned int direction);
  *
  * @return 0 on success, or -1 on failure and errno is set
  */
-int gpio_write(unsigned int gpio, unsigned int value);
+int gpio_write(unsigned int gpio, unsigned int value) {
+	
+	int fd = gpio_fd_open(gpio, SYSFS_GPIO_VALUE, O_WRONLY);
+	if (fd < 0) {
+		return fd;
+	}
+
+	if (value == LOW) {
+		write(fd, "0", 2);
+	} else {
+		write(fd, "1", 2);
+	}
+
+	close(fd);
+
+	return 0;
+}
 
 /**
  * @breif Read GPIO value
@@ -118,7 +130,24 @@ int gpio_write(unsigned int gpio, unsigned int value);
  *
  * @return Value of GPIO pin as HIGH or LOW, or -1 on failure and errno is set
  */
-int gpio_read(unsigned int gpio);
+int gpio_read(unsigned int gpio) {
+	
+	char ch;
+
+	int fd = gpio_fd_open(gpio, SYSFS_GPIO_VALUE, O_RDONLY);
+	if (fd < 0) {
+		return fd;
+	}
+
+	read(fd, &ch, 1);
+	close(fd);
+
+	if (ch == '0') {
+		return 0;
+	} else {
+		return 1;
+	}
+}
 
 /**
  * @breif Set GPIO edge trigger
@@ -130,7 +159,18 @@ int gpio_read(unsigned int gpio);
  *
  * @return 0 on success, or -1 on failure and errno is set
  */
-int gpio_set_edge(unsigned int gpio, char* edge);
+int gpio_set_edge(unsigned int gpio, char* edge) {
+	
+	int fd = gpio_fd_open(gpio, SYSFS_GPIO_EDGE, O_WRONLY);
+	if (fd < 0) {
+		return fd;
+	}
+
+	write(fd, edge, strlen(edge) + 1);
+	close(fd);
+
+	return 0;
+}
 
 /**
  * @brief Set GPIO to read active low
@@ -142,7 +182,23 @@ int gpio_set_edge(unsigned int gpio, char* edge);
  *
  * @return 0 on success, or -1 on failure and errno is set
  */
-int gpio_set_active_low(unsigned int gpio, unsigned int option);
+int gpio_set_active_low(unsigned int gpio, unsigned int option) {
+	
+	int fd = gpio_fd_open(gpio, SYSFS_GPIO_ACTIVE_LOW, O_WRONLY);
+	if (fd < 0) {
+		return fd;
+	}
+
+	if (option == FALSE) {
+		write(fd, "0", 2);
+	} else {
+		write(fd, "1", 2);
+	}
+
+	close(fd);
+
+	return 0;
+}
 
 /**
  * @brief Open GPIO file descriptor
@@ -155,6 +211,15 @@ int gpio_set_active_low(unsigned int gpio, unsigned int option);
  *
  * @return File descriptor on success, or -1 on failure and errno is set
  */
-int gpio_fd_open(unsigned int gpio, char* sysfs_file, int flags);
+int gpio_fd_open(unsigned int gpio, char* sysfs_file, int flags) {
+	
+	char buf[MAX_BUF];
 
-#endif
+	if (sysfs_file == SYSFS_GPIO_EXPORT || sysfs_file == SYSFS_GPIO_UNEXPORT) {
+		snprintf(buf, sizeof(buf), "%s/%s", SYSFS_GPIO_DIR, sysfs_file);
+	} else {
+		snprintf(buf, sizeof(buf), "%s/gpio%d/%s", SYSFS_GPIO_DIR, gpio, sysfs_file);
+	}
+
+	return open(buf, flags);
+}
