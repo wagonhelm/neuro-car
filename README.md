@@ -1,18 +1,61 @@
-# neuro-car
+# Installation Instructions
+
+```bash
+#Instal Pre-Reqs
+sudo apt-get remove cmdtest
+sudo apt-get install tmuxinator yarn
+
+#Install Ros
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+sudo apt-get update
+sudo apt-get install ros-melodic-ros-base
+sudo sh -c 'echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc'
+source ~/.bashrc
+
+#Install NodeJS
+curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+#Install Yarn
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update
+sudo apt-get install yarn
+
+#Build ThunderSVM
+cd thundersvm
+mkdir build && cd build && cmake .. && make -j
+
+#Build Neuro-Car
+cd catkin_ws
+catkin_make
+
+#Source NeuroCar Bashrc
+echo "source ~/neuro-car/scripts/neuro_car_bashrc.sh" >> ~/.bashrc'
+source ~/.bashrc
+```
+
+You can ignore the middle right window, that exists for hosting on a web server versus locally.
+
+
+# YeetMind 🧠
+
+[![MIT license](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/wagonhelm/neuro-car/blob/master/LICENSE)
+
 HackED 2020 Competition
 
 ## Web Functionality
 
-Open: http://localhost:3000/
-To select Muse2 bluetooth device
+Open:
 
-Open: http://localhost:43343/
-For accessing locally hosted webserver
+[To select Muse2 bluetooth device](http://localhost:3000/)
 
-Open: http://neurotransmitter.tech/
-For accessing live hosted webserver
+[For accessing locally hosted webserver](http://localhost:43343/)
 
-## Summary
+[For accessing live hosted webserver](http://neurotransmitter.tech/)
+
+## Summary :book:
 
 A Muse2 EEG device is used with Fourier transforms to produce a vector of frequencies and amplitudes.
 This vector is passed into an SVM to classify brain states, which are used to control an RC car.
@@ -21,17 +64,17 @@ We also measure fatigue to issue shocks to a user as a wake-up method.
 
 The SVM is trained to detect the following states, and their corresponding control mappings:
 
-eyes open -> drive forward
-eyes closed -> stop driving
-eyes left -> turn left ??
-eyes right -> turn right ??
++ eyes open :arrow_right: drive forward
++ eyes closed :arrow_right: stop driving
++ eyes left :arrow_right: turn left ??
++ eyes right :arrow_right: turn right ??
 
 fatigue levels as measured by sleep deprivation, quantized over [0, 5]
 5 -> shock
 
 ## Support Vector Machine
 
-### Data collection
+### Data collection :1234:
 
 Collect data with Muse2, export to CSV. Each CSV represents a time interval resultant from a Fourier transform.
 Empirically, at least 2 minutes of data per state is required for >80% classification accuracy.
@@ -43,15 +86,15 @@ This will produce .libsvm files. Do not add empty lines to these files as this w
 
 ### Training
 
-ThunderSVM is used with C-SVM for multiple class detection: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/index.md
-It must be compiled from source for CUDA 10 support: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/get-started.md#installation
-Parameters: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/parameters.md
+[ThunderSVM](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/index.md) is used with C-SVM for multiple class detection.
+It must be [compiled from source](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/get-started.md#installation) for CUDA 10 support.
+[These are the parameters.](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/parameters.md)
 
 The relevant variables are gamma and C.
 
-Reducing C will reduce the error margin on hyperplane placement during training: https://stats.stackexchange.com/questions/31066/what-is-the-influence-of-c-in-svms-with-linear-kernel
+Reducing C will reduce the error margin on hyperplane placement during training: [Stack Exchange](https://stats.stackexchange.com/questions/31066/what-is-the-influence-of-c-in-svms-with-linear-kernel)
 Gamma affects projection from "non-linear" space to linear space. Higher gamma results in smoother non-linear projection.
-Additional information on C and gamma: https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine
+Additional information on C and gamma: [Quora](https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine)
 
 These parameters are best found using a grid search.
 
@@ -85,7 +128,7 @@ Outpt topic: /svm/detection
 
 This receives EEG data and broadcasts classifications.
 
-### Car node
+### Car node :car:
 
 `roslaunch neuro_car car.launch`
 Input topic: /svm/detection
