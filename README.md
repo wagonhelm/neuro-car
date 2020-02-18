@@ -72,12 +72,25 @@ source ~/.bashrc
 mkdir ~/.tmuxinator
 cd ~/neuro-car/scripts/startup
 cp neurocar.yml ~/.tmuxinator
+```
+## Run Stack
 
-#Run stack
+Simply type into a terminal 
+
+```bash
 neuro_car_stack
-// Press ctrl-b then navigate to bottom left window and enter Y
+```
 
-#Kill stack
+### Connect Muse Headset
+Only works in chrome  
+chrome://flags/#enable-experimental-web-platform-features needs to be enabled  
+Connect Muse headset via http://localhost:3000
+
+### Kill stack
+
+Simply type into terminal  
+
+```bash
 die
 ```
 
