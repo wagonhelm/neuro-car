@@ -80,7 +80,7 @@ neuro_car_stack
 
 #Kill stack
 echo 'alias die="tmux kill-server"' >> ~/.bashrc
-
+```
 
 ## Support Vector Machine
 
