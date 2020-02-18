@@ -42,7 +42,6 @@ mkdir build && cd build
 cmake ..
 make
 sudo make install
-cd ../..
 python -m pip install Adafruit-MotorHAT --user
 python -m pip install Adafruit-SSD1306 --user
 sudo usermod -aG i2c $USER
@@ -72,7 +71,7 @@ echo 'alias die="tmux kill-server"' >> ~/.bashrc
 source ~/.bashrc
 mkdir ~/.tmuxinator
 cd ~/neuro-car/scripts/startup
-cp neurocar.yml ~/tmuxinator
+cp neurocar.yml ~/.tmuxinator
 
 #Run stack
 neuro_car_stack
