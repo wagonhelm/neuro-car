@@ -15,7 +15,7 @@ fatigue level : 1 -> 3 Scale
 attention to road : Binary classifier  
 
 The entire stack is hosted on the Jetson nano with options for hosting the web-app on dedicated server.  To view web app
-connect Jetson nano to wireless router, run the stack and find ip address on led screen.  Connect to <ipaddres>:<port assigned by tmuxinator>
+connect Jetson nano to wireless router, run the stack and find ip address on led screen, connect to port assigned by stack script.
 
 ## Installation Instructions
 ```bash
