@@ -1,6 +1,6 @@
 # YeetMind 🧠
 
-## Summary
+## Summary :book:
 
 A Muse2 EEG device is used with Fourier transforms to produce a vector of frequencies and amplitudes.
 This vector is passed into an SVM to classify brain states, which are used to control an RC car.
@@ -84,7 +84,7 @@ echo 'alias die="tmux kill-server"' >> ~/.bashrc
 
 ## Support Vector Machine
 
-### Data collection
+### Data collection :1234:
 
 Collect data with Muse2, export to CSV. Each CSV represents a time interval resultant from a Fourier transform.
 Empirically, at least 2 minutes of data per state is required for >80% classification accuracy.
@@ -96,15 +96,15 @@ This will produce .libsvm files. Do not add empty lines to these files as this w
 
 ### Training
 
-ThunderSVM is used with C-SVM for multiple class detection: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/index.md
-It must be compiled from source for CUDA 10 support: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/get-started.md#installation
-Parameters: https://github.com/Xtra-Computing/thundersvm/blob/master/docs/parameters.md
+[ThunderSVM](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/index.md) is used with C-SVM for multiple class detection.
+It must be [compiled from source](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/get-started.md#installation) for CUDA 10 support.
+[These are the parameters.](https://github.com/Xtra-Computing/thundersvm/blob/master/docs/parameters.md)
 
 The relevant variables are gamma and C.
 
-Reducing C will reduce the error margin on hyperplane placement during training: https://stats.stackexchange.com/questions/31066/what-is-the-influence-of-c-in-svms-with-linear-kernel
+Reducing C will reduce the error margin on hyperplane placement during training: [Stack Exchange](https://stats.stackexchange.com/questions/31066/what-is-the-influence-of-c-in-svms-with-linear-kernel)
 Gamma affects projection from "non-linear" space to linear space. Higher gamma results in smoother non-linear projection.
-Additional information on C and gamma: https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine
+Additional information on C and gamma: [Quora](https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine)
 
 These parameters are best found using a grid search.
 
@@ -138,7 +138,7 @@ Outpt topic: /svm/detection
 
 This receives EEG data and broadcasts classifications.
 
-### Car node
+### Car node :car:
 
 `roslaunch neuro_car car.launch`
 Input topic: /svm/detection
