@@ -9,10 +9,10 @@ We also measure fatigue and pull the car over to the side of the road if driver 
 
 The SVM is trained to detect the following states, and their corresponding control mappings:
 
-eyes open -> drive normal speed
-eyes closed -> slow down
-fatigue level : 1 -> 3 Scale
-attention to road : Binary classifier
+eyes open -> drive normal speed  
+eyes closed -> slow down  
+fatigue level : 1 -> 3 Scale  
+attention to road : Binary classifier  
 
 The entire stack is hosted on the Jetson nano with options for hosting the web-app on dedicated server.  To view web app
 connect Jetson nano to wireless router, run the stack and find ip address on led screen.  Connect to <ipaddres>:<port assigned by tmuxinator>
