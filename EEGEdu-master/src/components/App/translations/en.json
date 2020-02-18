@@ -1,9 +1,6 @@
 {
   "title": "YeetMind",
   "subtitle": [
-      "Welcome to our innovative product! A real time brain state monitoring tool to improve driver awareness.",
-      "Our primary goal is to increase road safety for all.",
-      "We implement several integrated solution including machine learning interfacing with hardware including a shock delivering braclet and commercial 4 channel EEG. We also integrated an RC car as a proxy for later integration with vehicles. This is served through a mobile friendly web application.",
-      "This was project was completed within 24 hours as part of HackED 2020."
+      "A real time brain state monitoring tool to improve driver awareness."
   ]
 }

@@ -43,6 +43,7 @@ link_directories()
 
 add_library(util
     src/sigint_handler.cpp
+        src/gpio.cpp
 )
 target_link_libraries(util ${catkin_LIBRARIES})
 

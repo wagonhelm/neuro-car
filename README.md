@@ -1,34 +1,86 @@
 # YeetMind 🧠
-[![MIT license](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/wagonhelm/neuro-car/blob/master/LICENSE)
-
-HackED 2020 Competition
-
-## Web Functionality
-
-Open:
-
-[To select Muse2 bluetooth device](http://localhost:3000/)
-
-[For accessing locally hosted webserver](http://localhost:43343/)
-
-[For accessing live hosted webserver](http://neurotransmitter.tech/)
 
 ## Summary :book:
 
 A Muse2 EEG device is used with Fourier transforms to produce a vector of frequencies and amplitudes.
 This vector is passed into an SVM to classify brain states, which are used to control an RC car.
 
-We also measure fatigue to issue shocks to a user as a wake-up method.
+We also measure fatigue and pull the car over to the side of the road if driver has lost attention for too long.
 
 The SVM is trained to detect the following states, and their corresponding control mappings:
 
-+ eyes open :arrow_right: drive forward
-+ eyes closed :arrow_right: stop driving
-+ eyes left :arrow_right: turn left ??
-+ eyes right :arrow_right: turn right ??
+eyes open -> drive normal speed  
+eyes closed -> slow down  
+fatigue level : 1 -> 3 Scale  
+attention to road : Binary classifier  
 
-fatigue levels as measured by sleep deprivation, quantized over [0, 5]
-5 -> shock
+The entire stack is hosted on the Jetson nano with options for hosting the web-app on dedicated server.  To view web app
+connect Jetson nano to wireless router, run the stack and find ip address on led screen, connect to port assigned by stack script.
+
+## Installation Instructions
+```bash
+# Instal Pre-Reqs
+sudo apt-get remove cmdtest
+sudo apt-get install tmuxinator libglew-dev python-pip
+
+# Clone Yeetmind repo to home directory
+cd ~
+git clone https://github.com/wagonhelm/neuro-car
+
+#Install Ros
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+sudo apt-get update
+sudo apt-get install ros-melodic-ros-base
+sudo sh -c 'echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc'
+source ~/.bashrc
+
+# Install jetson-utils 
+git clone https://github.com/dusty-nv/jetson-utils.git
+cd jetson-utils
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+cd ../..
+python -m pip install Adafruit-MotorHAT --user
+python -m pip install Adafruit-SSD1306 --user
+sudo usermod -aG i2c $USER
+
+# Install NodeJS
+curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Install Yarn
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get update
+sudo apt-get install yarn
+
+# Build ThunderSVM
+cd thundersvm
+mkdir build && cd build && cmake .. && make -j
+
+# Build Neuro-Car
+cd ~/neuro-car catkin_ws
+catkin_make
+
+#Source NeuroCar Bashrc
+echo "source ~/neuro-car/scripts/neuro_car_bashrc.sh" >> ~/.bashrc'
+echo "alias neuro_car_stack='tmuxinator start neurocar'" >> ~/.bashrc
+echo 'alias die="tmux kill-server"' >> ~/.bashrc
+source ~/.bashrc
+mkdir ~/.tmuxinator
+cd ~/neuro-car/scripts/startup
+cp neurocar.yml ~/tmuxinator
+
+#Run stack
+neuro_car_stack
+// Press ctrl-b then navigate to bottom left window and enter Y
+
+#Kill stack
+echo 'alias die="tmux kill-server"' >> ~/.bashrc
+```
 
 ## Support Vector Machine
 
