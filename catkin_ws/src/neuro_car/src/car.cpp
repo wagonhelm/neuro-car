@@ -17,8 +17,9 @@ int maxClosedLen = 20;
 std::list<int> eyesBuffer, fatigueBuffer, attentionBuffer;
 std::list<int> closedBuffer={1,1,1,1,1,1,1,1,1,1};
 ros::Subscriber svmEyesSub, svmFatigueSub, svmAttentionSub;
-ros::Publisher eyesPub, fatiguePub, attentionPub, motorPub;
+ros::Publisher eyesPub, fatiguePub, attentionPub, motorPub, ledPub;
 std_msgs::String motorString;
+std_msgs::String ledString;
 
 void eyesCallback(const std_msgs::Int32::ConstPtr& msg)
 {
@@ -27,6 +28,8 @@ void eyesCallback(const std_msgs::Int32::ConstPtr& msg)
         if (motorString.data != "med") {
             motorString.data = "med";
             motorPub.publish(motorString);
+            ledString.data = "Full Focus!";
+            ledPub.publish(ledString);
         }
 
     }
@@ -36,6 +39,8 @@ void eyesCallback(const std_msgs::Int32::ConstPtr& msg)
         if (motorString.data != "slow") {
         motorString.data = "slow";
         motorPub.publish(motorString);
+        ledString.data = "Slowing Down!";
+        ledPub.publish(ledString);
         }
     }
 
@@ -81,6 +86,8 @@ void eyesCallback(const std_msgs::Int32::ConstPtr& msg)
 //        system(command);
         motorString.data = "pullover";
         motorPub.publish(motorString);
+        ledString.data = "Unsafe to drive!!!";
+        ledPub.publish(ledString);
         ros::Duration(1000).sleep();
         closedBuffer.pop_front();
         closedBuffer.pop_front();
@@ -157,6 +164,7 @@ int main(int argc, char** argv) {
     fatiguePub = priv_nh.advertise<std_msgs::Int32>("fatigue", 0);
     attentionPub = priv_nh.advertise<std_msgs::Int32>("attention", 0);
     motorPub = priv_nh.advertise<std_msgs::String>("/jetbot_motors/cmd_str", 0);
+    ledPub = priv_nh.advertise<std_msgs::String>("/jetbot_oled/user_text", 0);
 
 
 
