@@ -1,3 +1,5 @@
+//DEPRECATED - WE ENDED UP USING THE JETBOT INSTEAD
+
 import sys
 import socketio
 import Jetson.GPIO as GPIO
